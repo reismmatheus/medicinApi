@@ -41,7 +41,7 @@ namespace MedicinApi.Repositories
 
         public Model.User GetById(string id)
         {
-            return _context.Users.Find(id);
+            return _context.Users.Find(new Guid(id));
         }
 
         public Model.User Create(Model.User user, string password)

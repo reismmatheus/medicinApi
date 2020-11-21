@@ -18,7 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace MedicinApi.Controllers
 {
     //[Authorize]
-    [Route("api")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller
     {

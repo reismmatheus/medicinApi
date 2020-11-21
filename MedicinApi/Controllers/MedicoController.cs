@@ -2,6 +2,7 @@
 
 using MedicinApi.Repositories;
 using MedicinApi.Repositories.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace MedicinApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create([FromBody] Models.Medico medico)
         {
             var especialidades = new List<Especialidade>();
@@ -51,6 +53,7 @@ namespace MedicinApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(Guid id)
         {
             _medicoRepository.Remove(id);
