@@ -21,6 +21,7 @@ namespace MedicinApi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                        //.UseUrls("http://localhost:3000");
                 });
     }
 }
