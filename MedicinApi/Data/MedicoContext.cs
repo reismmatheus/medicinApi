@@ -13,6 +13,7 @@ namespace MedicinApi.Data
 
         public DbSet<Medico> Medicos { get; set; }
         public DbSet<Especialidade> Especialidades { get; set; }
+        public DbSet<EspecialidadeMedico> EspecialidadeMedicos { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

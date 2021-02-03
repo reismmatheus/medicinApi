@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace MedicinApi.Repositories.Model
 {
-    public class Especialidade
+    public class EspecialidadeMedico
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public string Nome { get; set; }
+        public Guid MedicoId { get; set; }
+        public Guid EspecialidadeId { get; set; }
     }
 }

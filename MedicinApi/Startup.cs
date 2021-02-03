@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,7 +73,32 @@ namespace MedicinApi
 
             services.AddTransient<IMedicoRepository, MedicoRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IEspecialidadeRepository, EspecialidadeRepository>();
+            services.AddTransient<IEspecialidadeMedicoRepository, EspecialidadeMedicoRepository>();
             services.AddControllers();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "MedicinApi",
+                    Description = "A Service to doctors",
+                    TermsOfService = new Uri("https://github.com/reismmatheus"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Matheus Reis",
+                        Email = "reis.mmatheus@gmail.com",
+                        Url = new Uri("https://github.com/reismmatheus"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Use under LICX",
+                        Url = new Uri("https://example.com/license"),
+                    }
+                });
+            });
+
             services.AddDbContext<DatabaseContext>(options =>
                 options.UseSqlServer(ConnectionString));
             services.AddMemoryCache();
@@ -81,6 +107,17 @@ namespace MedicinApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger(c =>
+            {
+                c.SerializeAsV2 = true;
+            });
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MedicinApi");
+                c.RoutePrefix = string.Empty;
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

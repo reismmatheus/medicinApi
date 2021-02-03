@@ -1,11 +1,13 @@
 ﻿
 
+using MedicinApi.Models;
 using MedicinApi.Repositories;
 using MedicinApi.Repositories.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MedicinApi.Controllers
 {
@@ -14,9 +16,13 @@ namespace MedicinApi.Controllers
     public class MedicoController : Controller
     {
         private readonly IMedicoRepository _medicoRepository;
-        public MedicoController(IMedicoRepository medicoRepository)
+        private readonly IEspecialidadeRepository _especialidadeRepository;
+        private readonly IEspecialidadeMedicoRepository _especialidadeMedicoRepository;
+        public MedicoController(IMedicoRepository medicoRepository, IEspecialidadeRepository especialidadeRepository, IEspecialidadeMedicoRepository especialidadeMedicoRepository)
         {
             _medicoRepository = medicoRepository;
+            _especialidadeRepository = especialidadeRepository;
+            _especialidadeMedicoRepository = especialidadeMedicoRepository;
         }
 
         [HttpGet]
@@ -34,21 +40,40 @@ namespace MedicinApi.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public IActionResult Create([FromBody] Models.Medico medico)
         {
-            var especialidades = new List<Especialidade>();
-            medico.Especialidades.ForEach(x =>
+            var especialidades = _especialidadeRepository.GetAll().ToList();
+
+            var especialidadesMedico = new List<EspecialidadeMedico>();
+
+            var especialidadesNaoCadastradas = new List<Especialidade>();
+
+            var especialidadesCadastradas = especialidades.Where(x => medico.Especialidades.Any(y => y.ToLower() == x.Nome.ToLower())).ToList();
+
+            especialidadesNaoCadastradas = (especialidades.Any()) ? especialidades.Where(x => !medico.Especialidades.Any(y => y.ToLower() == x.Nome.ToLower())).ToList() : medico.Especialidades.Select(x => new Especialidade { Nome = x }).ToList();
+
+            foreach (var item in especialidadesNaoCadastradas)
             {
-                especialidades.Add(new Especialidade { Nome = x });
-            });
-            var insert = _medicoRepository.Add(new Medico
+                var itemEspecialidade = new Especialidade { Nome = item.Nome };
+                var idEspecialidade = _especialidadeRepository.Add(itemEspecialidade);
+                especialidadesCadastradas.Add(new Especialidade { Id = new Guid(idEspecialidade), Nome = item.Nome });
+            }
+
+            var insert = _medicoRepository.Add(new Repositories.Model.Medico
             {
                 Nome = medico.Nome,
                 Cpf = medico.Cpf,
-                Crm = medico.Crm,
-                Especialidades = especialidades
+                Crm = medico.Crm
             });
+
+            foreach (var item in especialidadesCadastradas)
+            {
+                especialidadesMedico.Add(new EspecialidadeMedico { EspecialidadeId = item.Id, MedicoId = new Guid(insert) });
+            }
+
+            _especialidadeMedicoRepository.AddRange(especialidadesMedico);
+
             return Ok(insert);
         }
 

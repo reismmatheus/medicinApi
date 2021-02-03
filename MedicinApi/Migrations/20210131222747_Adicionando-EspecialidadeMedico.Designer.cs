@@ -4,14 +4,16 @@ using MedicinApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MedicinApi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class MedicoContextModelSnapshot : ModelSnapshot
+    [Migration("20210131222747_Adicionando-EspecialidadeMedico")]
+    partial class AdicionandoEspecialidadeMedico
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

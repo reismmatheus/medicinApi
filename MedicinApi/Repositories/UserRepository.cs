@@ -22,15 +22,12 @@ namespace MedicinApi.Repositories
 
             var user = _context.Users.SingleOrDefault(x => x.Username == username);
 
-            // check if username exists
             if (user == null)
                 return null;
 
-            // check if password is correct
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
                 return null;
 
-            // authentication successful
             return user;
         }
 
@@ -46,7 +43,6 @@ namespace MedicinApi.Repositories
 
         public Model.User Create(Model.User user, string password)
         {
-            // validation
             if (string.IsNullOrWhiteSpace(password))
                 throw new AppException("Password is required");
 
@@ -64,54 +60,6 @@ namespace MedicinApi.Repositories
 
             return user;
         }
-
-        //public void Update(User userParam, string password = null)
-        //{
-        //    var user = _context.Users.Find(userParam.Id);
-
-        //    if (user == null)
-        //        throw new AppException("User not found");
-
-        //    // update username if it has changed
-        //    if (!string.IsNullOrWhiteSpace(userParam.Username) && userParam.Username != user.Username)
-        //    {
-        //        // throw error if the new username is already taken
-        //        if (_context.Users.Any(x => x.Username == userParam.Username))
-        //            throw new AppException("Username " + userParam.Username + " is already taken");
-
-        //        user.Username = userParam.Username;
-        //    }
-
-        //    // update user properties if provided
-        //    if (!string.IsNullOrWhiteSpace(userParam.FirstName))
-        //        user.FirstName = userParam.FirstName;
-
-        //    if (!string.IsNullOrWhiteSpace(userParam.LastName))
-        //        user.LastName = userParam.LastName;
-
-        //    // update password if provided
-        //    if (!string.IsNullOrWhiteSpace(password))
-        //    {
-        //        byte[] passwordHash, passwordSalt;
-        //        CreatePasswordHash(password, out passwordHash, out passwordSalt);
-
-        //        user.PasswordHash = passwordHash;
-        //        user.PasswordSalt = passwordSalt;
-        //    }
-
-        //    _context.Users.Update(user);
-        //    _context.SaveChanges();
-        //}
-
-        //public void Delete(int id)
-        //{
-        //    var user = _context.Users.Find(id);
-        //    if (user != null)
-        //    {
-        //        _context.Users.Remove(user);
-        //        _context.SaveChanges();
-        //    }
-        //}
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {

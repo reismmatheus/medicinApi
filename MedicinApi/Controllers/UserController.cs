@@ -69,7 +69,7 @@ namespace MedicinApi.Controllers
         [HttpPost("register")]
         public IActionResult Register([FromBody] Register model)
         {
-            var user = new User
+            var user = new Repositories.Model.User
             {
                 Name = model.Name,
                 Username = model.Username
