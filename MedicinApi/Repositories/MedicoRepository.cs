@@ -31,15 +31,20 @@ namespace MedicinApi.Repositories
         {
             var result = new List<Models.Medico>();
             var medicos = _context.Medicos.ToList();
+            var especialidadeMedicos = _context.EspecialidadeMedicos.ToList();
+            var especialidades = _context.Especialidades.ToList();
+
             foreach (var item in medicos)
             {
+                var especialidadeMedico = especialidadeMedicos.Where(x => x.MedicoId == item.Id).Select(x => x.Especialidade);
+
                 result.Add(new Models.Medico
                 {
                     Id = item.Id,
                     Cpf = item.Cpf,
                     Crm = item.Crm,
                     Nome = item.Nome,
-                    Especialidades = _context.Especialidades.Where(x => item.Especialidades.Any(y => y.EspecialidadeId == x.Id))?.ToList().Select(x => x.Nome).ToList()
+                    Especialidades = especialidadeMedico.Select(x => x.Nome).ToList()
                 });
             }
             return result;
@@ -48,19 +53,21 @@ namespace MedicinApi.Repositories
         public IEnumerable<Models.Medico> GetByEspecialidade(string especialidade)
         {
             var result = new List<Models.Medico>();
+            var medicos = _context.Medicos.ToList();
+            var especialidadeMedicos = _context.EspecialidadeMedicos.ToList();
+            var especialidades = _context.Especialidades.ToList();
 
-            var especialidades = _context.Especialidades.Where(x => x.Nome.ToLower() == especialidade.ToLower());
-            var medicos = _context.Medicos.Where(x => x.Especialidades.Any(y => especialidades.Any(x => x.Id == y.EspecialidadeId))).ToList();
-            foreach (var item in medicos)
+            foreach (var item in medicos.Where(x => x.EspecialidadeMedico.Any(y => y.Especialidade.Nome.ToLower() == especialidade.ToLower())))
             {
-                var especialidadesMedico = _context.EspecialidadeMedicos.Where(x => x.MedicoId == item.Id);
+                var especialidadeMedico = especialidadeMedicos.Where(x => x.MedicoId == item.Id).Select(x => x.Especialidade);
+
                 result.Add(new Models.Medico
                 {
                     Id = item.Id,
                     Cpf = item.Cpf,
                     Crm = item.Crm,
                     Nome = item.Nome,
-                    Especialidades = _context.Especialidades.Where(x => especialidadesMedico.Any(y => y.EspecialidadeId == x.Id))?.ToList().Select(x => x.Nome).ToList()
+                    Especialidades = especialidadeMedico.Select(x => x.Nome).ToList()
                 });
             }
             return result;
@@ -68,14 +75,14 @@ namespace MedicinApi.Repositories
 
         public void Remove(Guid id)
         {
-            //var medico = _context.Medicos.First(x => x.Id == id);
+            var medico = _context.Medicos.First(x => x.Id == id);
             //var especialidades = _context.Especialidades.Where(x => x.MedicoId == medico.Id);
             //foreach (var especialidade in especialidades)
             //{
             //    _context.Especialidades.Remove(especialidade);
             //}
-            //_context.Medicos.Remove(medico);
-            //_context.SaveChanges();
+            _context.Medicos.Remove(medico);
+            _context.SaveChanges();
         }
 
         public void Update(Model.Medico medico)

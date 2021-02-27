@@ -21,5 +21,15 @@ namespace MedicinApi.Data
             optionsBuilder.UseSqlServer(Startup.ConnectionString);
             base.OnConfiguring(optionsBuilder);
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Medico>()
+                .HasMany(x => x.EspecialidadeMedico)
+                .WithOne(x => x.Medico);
+
+            modelBuilder.Entity<EspecialidadeMedico>()
+                .HasOne(x => x.Especialidade);
+        }
     }
 }

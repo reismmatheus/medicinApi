@@ -15,6 +15,6 @@ namespace MedicinApi.Repositories.Model
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public string Crm { get; set; }
-        public List<EspecialidadeMedico> Especialidades { get; set; }
+        public ICollection<EspecialidadeMedico> EspecialidadeMedico { get; set; }
     }
 }

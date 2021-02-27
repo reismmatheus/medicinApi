@@ -12,7 +12,9 @@ namespace MedicinApi.Repositories.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+        public Medico Medico { get; set; }
         public Guid MedicoId { get; set; }
+        public Especialidade Especialidade { get; set; }
         public Guid EspecialidadeId { get; set; }
     }
 }

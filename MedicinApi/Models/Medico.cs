@@ -19,6 +19,6 @@ namespace MedicinApi.Models
         public string Crm { get; set; }
         [Required(ErrorMessage = "Especialidades é obrigatório")]
         [EmptyList(ErrorMessage = "Deve haver ao menos uma especialidade")]
-        public List<string> Especialidades { get; set; }
+        public List<string> Especialidades { get; set; } = new List<string>();
     }
 }

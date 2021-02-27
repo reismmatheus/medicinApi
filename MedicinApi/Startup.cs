@@ -83,18 +83,37 @@ namespace MedicinApi
                 {
                     Version = "v1",
                     Title = "MedicinApi",
-                    Description = "A Service to doctors",
+                    Description = "A Service to search doctors",
                     TermsOfService = new Uri("https://github.com/reismmatheus"),
                     Contact = new OpenApiContact
                     {
                         Name = "Matheus Reis",
                         Email = "reis.mmatheus@gmail.com",
                         Url = new Uri("https://github.com/reismmatheus"),
-                    },
-                    License = new OpenApiLicense
+                    }
+                });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer {Token}')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
                     {
-                        Name = "Use under LICX",
-                        Url = new Uri("https://example.com/license"),
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
                     }
                 });
             });
