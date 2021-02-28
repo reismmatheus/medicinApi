@@ -36,8 +36,8 @@ namespace MedicinApi
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            //var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes("d3e84769b4fce34f69a850e42b25282c");  //appSettings.Secret
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -118,8 +118,10 @@ namespace MedicinApi
                 });
             });
 
+            ConnectionString = "Data Source=DESKTOP-M9CNHCN\\SQLEXPRESS;Initial Catalog=medicin-api;Integrated Security=True";
+
             services.AddDbContext<DatabaseContext>(options =>
-                options.UseSqlServer(ConnectionString));
+                options.UseSqlServer("Data Source=DESKTOP-M9CNHCN\\SQLEXPRESS;Initial Catalog=medicin-api;Integrated Security=True")); //ConnectionString
             services.AddMemoryCache();
         }
 

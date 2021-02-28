@@ -43,7 +43,7 @@ namespace MedicinApi.Controllers
                 return BadRequest(new { message = "Username ou senha incorreto." });
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes("d3e84769b4fce34f69a850e42b25282c");  //_appSettings.Secret
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

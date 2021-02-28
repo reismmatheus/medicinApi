@@ -13,7 +13,6 @@ namespace MedicinApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class MedicoController : Controller
     {
         private readonly IMedicoRepository _medicoRepository;
@@ -41,6 +40,7 @@ namespace MedicinApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create([FromBody] Models.Medico medico)
         {
             var insert = _medicoRepository.Add(new Repositories.Model.Medico
@@ -81,6 +81,7 @@ namespace MedicinApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(Guid id)
         {
             _medicoRepository.Remove(id);
