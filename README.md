@@ -11,7 +11,8 @@ Install the dependencies and devDependencies and start the server.
 
 Run in https://localhost:5001
 
-![Endpoints](https://github.com/reismmatheus/medicinApi/tree/main/blob/swagger.png?raw=true)
+##### Swagger
+![Endpoints](https://raw.githubusercontent.com/reismmatheus/medicinApi/main/blob/swagger.png)
 
 ## Tech
 
